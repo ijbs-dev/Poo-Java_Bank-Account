@@ -2,9 +2,9 @@ package org.exercicio.banco.template.model;
 
 /**
 *
-* Nome:
-* Curso:
-* Matrícula:
+* Nome: Ismael Jefte Bispo da Silva
+* Curso: TSI
+* Matrícula: 20201TSIIG0150
 * 
 */
 public class ContaBancaria {
@@ -45,7 +45,11 @@ public class ContaBancaria {
 	 * @param valor
 	 */
 	public void depositar(double valor) {
-		
+		if (valor > 0) {
+			this.saldo = valor;
+		} else {
+			System.out.print("Valor invalido para deposito.");
+		}		
 	}
 
 	/**
@@ -62,6 +66,24 @@ public class ContaBancaria {
 	 */
 	public void sacar(double valor) {
 		
+		if (!this.status) {	
+			System.out.print("Conta inativa.");	
+			return;
+		}
+		
+		if (valor <= 0 ) {
+			System.out.print("Valor inválido para saque.");
+			return;
+		} 
+		
+		if (valor > this.saldo) {
+			System.out.print("Saldo insuficiente.");
+			return;
+		}
+			this.saldo -= valor;
+		
+		
+		
 	}
 
 	/**
@@ -74,6 +96,15 @@ public class ContaBancaria {
 	 */
 	public void fecharConta() {
 		
+		if (!this.status) {
+			System.out.print("Conta ja inativa.");
+		}
+		
+		if (this.saldo != 0) {
+			System.out.print("Conta com saldo. Nao eh possivel fecha-la.");
+		} else {
+			this.status = false;
+		}
 	}
 
 	/**
@@ -83,25 +114,55 @@ public class ContaBancaria {
 	 */
 	public void reabrirConta() {
 		
+		if (this.status = false) {
+			this.status = true;
+		} else {
+			System.out.print("Conta já ativa.");
+		}
 	}
 
 	/**
 	 * Metodo exige que seja passado o parametro quantia e contadestino, o qual ira
 	 * decrementar a quantia do saldo da conta que executa o metodo e incrementa a
-	 * mesma quantia no saldo da conta destino. Trate as condicoes na seguinte ordem:
+	 * mesma quantia no saldo da conta destino. 
+	 * 
+	 * Trate as condicoes na seguinte ordem:
+	 * 
 	 * Caso a conta de origem esteja desativada, exiba a msg no console:
-	 * "Conta de origem inativa.". Em seguida, verifique se a conta destino
-	 * tambem esta ativa, caso nao esteja exiba no console: 
-	 * "Conta de destino inativa.". Por fim, caso a quantia passada seja maior
-	 * que o saldo disponivel na conta de origem, a msg "Saldo insuficiente para
-	 * transferencia." deve ser exibida no console. Utilize System.out.print();
+	 * "Conta de origem inativa." 
+	 * 
+	 * Em seguida, verifique se a conta destino	tambem esta ativa, caso nao 
+	 * esteja exiba no console: "Conta de destino inativa.". 
+	 * 
+	 * Por fim, caso a quantia passada seja maior que o saldo disponivel 
+	 * na conta de origem, a msg "Saldo insuficiente para transferencia." 
+	 * deve ser exibida no console. 
+	 * 
+	 * Utilize System.out.print();
 	 * 
 	 * @param quantia
 	 * @param destino
 	 */
 	public void realizarTransferencia(double quantia, ContaBancaria destino) {
 
-	}
+		if (!this.status) {
+			System.out.print("Conta de origem inativa.");
+			return;
+		}		
+		
+        if (!destino.getStatus()) {
+            System.out.print("Conta de destino inativa.");            
+            return;
+        }
+
+        if (quantia > this.saldo ) {
+            System.out.print("Saldo insuficiente para transferencia.");            
+            return;
+        }
+        
+        destino.depositar(quantia);
+    }
+		
 
 	public int getNumeroConta() {
 		return numeroConta;
@@ -121,9 +182,18 @@ public class ContaBancaria {
 
 	public double getSaldo() {
 		return saldo;
-	}
+	}	
 
-	public boolean isAtiva() {
+	public boolean getStatus() {
 		return status;
 	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+
+	public void setSaldo(double saldo) {
+		this.saldo = saldo;
+	}
+	
 }
